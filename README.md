@@ -51,19 +51,17 @@ Follow these instructions to get the project up and running on your local machin
         ```
 
 4.  **Apply database migrations:**
-    * Run the following command in your terminal to create the database and its tables based on the models:
+    * Run the following command in your package manager console to create the database and its tables based on the models:
     ```bash
-    dotnet ef database update
+    Add-Migration Filename
+    update-database
     ```
 
 5.  **Run the application:**
-    ```bash
-    dotnet run
-    ```
 
 6.  **Access the API:**
     * The API will be running on the port specified in your `Properties/launchSettings.json` file (e.g., `http://localhost:5000`).
-    * You can access the **Swagger UI** for testing and documentation by navigating to `http://localhost:5000/swagger` in your browser.
+    * You can access the **Swagger UI** for testing and documentation by navigating to `http://localhost:5000/swagger` in your browser or use **postman**
 
 ## API Endpoints
 
