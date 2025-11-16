@@ -6,7 +6,7 @@ namespace Preethu.Phone.API.Repositories
     {
         List<SmartPhone> GetAll();
         SmartPhone GetById(int id);
-        bool Create(SmartPhone specs);
+        string Create(SmartPhone specs);
         bool Update(int id, SmartPhone spec);
         bool Delete(int id);
         List<SmartPhone>? GetBySpecs(SearchQuery searchQuery);

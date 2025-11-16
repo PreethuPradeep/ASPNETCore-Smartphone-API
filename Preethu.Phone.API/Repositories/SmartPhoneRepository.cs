@@ -11,30 +11,29 @@ namespace Preethu.Phone.API.Repositories
         {
             this.smartPhoneDbContext = smartPhoneDbContext;
         }
-        public bool Create(SmartPhone smartPhone)
+        public string Create(SmartPhone smartPhone)
         {
-            // Check for duplicate by name (case-insensitive)
-            var existing = smartPhoneDbContext.TblSmartPhone
+            var existingName = smartPhoneDbContext.TblSmartPhone
                 .FirstOrDefault(x => x.Name.ToLower() == smartPhone.Name.ToLower());
-
-            if (existing != null)
+            if (existingName != null)
             {
-                return false; // Duplicate found
+                return "duplicate name";
             }
             var manufacturerExists = smartPhoneDbContext.TblManufacturer
-            .Any(m => m.MId == smartPhone.MId);
-            var SpecExists = smartPhoneDbContext.TblSpecification
-            .Any(m => m.SpecId == smartPhone.SpecId);
-            if (manufacturerExists!=false && SpecExists != false)
+                .Any(m => m.MId == smartPhone.MId);
+            if (!manufacturerExists)
             {
-                smartPhoneDbContext.TblSmartPhone.Add(smartPhone);
-                smartPhoneDbContext.SaveChanges();
-                return true;
+                return "invalid manufacturer";
             }
-            else
+            var specExists = smartPhoneDbContext.TblSpecification
+                .Any(s => s.SpecId == smartPhone.SpecId);
+            if (!specExists)
             {
-                return false;
+                return "invalid specification";
             }
+            smartPhoneDbContext.TblSmartPhone.Add(smartPhone);
+            smartPhoneDbContext.SaveChanges();
+            return "success";
         }
 
         public bool Delete(int id)

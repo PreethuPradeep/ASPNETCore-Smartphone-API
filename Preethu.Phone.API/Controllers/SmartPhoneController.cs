@@ -8,6 +8,7 @@ namespace Preethu.Phone.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class SmartPhoneController : ControllerBase
     {
         ISmartPhoneRepository smartPhoneRepository;
@@ -63,21 +64,31 @@ namespace Preethu.Phone.API.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public IActionResult Add(SmartPhone smartPhone)
         {
-            var isCreated = smartPhoneRepository.Create(smartPhone);
-            if (!isCreated)
+            string createStatus = smartPhoneRepository.Create(smartPhone);
+            switch (createStatus)
             {
-                return Conflict(new { error = $"A Smart Phone with the name '{smartPhone.Name}' already exists." });
+                case "success":
+                    var smartPhoneAdded = smartPhoneRepository.GetById(smartPhone.Id);
+                    string msg = "Successfully created Smart Phone";
+                    return Ok(new { smartPhoneAdded, msg });
+
+                case "duplicate name":
+                    return BadRequest(new { message = $"A smartphone with the name '{smartPhone.Name}' already exists." });
+
+                case "invalid manufacturer":
+                    return BadRequest(new { message = $"Invalid Manufacturer: ID {smartPhone.MId} does not exist." });
+
+                case "invalid specification":
+                    return BadRequest(new { message = $"Invalid Specification: ID {smartPhone.SpecId} does not exist." });
+
+                default:
+                    return StatusCode(500, new { message = "An unexpected error occurred." });
             }
-            var smartPhoneAdded = smartPhoneRepository.GetById(smartPhone.Id);
-            string msg = "Successfully created Smart Phone";
-            return Ok(new { smartPhoneAdded, msg });
         }
 
         [HttpPut("{id}")]
-        [Authorize]
         public IActionResult Edit(int id, SmartPhone smartPhone)
         {
             if (smartPhone == null)
@@ -96,7 +107,6 @@ namespace Preethu.Phone.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize]
         public IActionResult Delete(int id)
         {
             var existingsmartPhone = smartPhoneRepository.GetById(id);

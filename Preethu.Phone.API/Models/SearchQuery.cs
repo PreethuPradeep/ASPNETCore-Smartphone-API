@@ -6,6 +6,7 @@ namespace Preethu.Phone.API.Models
     {
         [Key]
         public int QueryId { get; set; }
+        public string? Name { get; set; }
         public string? Processor { get; set; }
         public string? Storage { get; set; }
         public string? RAM { get; set; }

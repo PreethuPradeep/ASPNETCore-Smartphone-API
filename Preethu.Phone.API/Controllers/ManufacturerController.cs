@@ -8,6 +8,7 @@ namespace Preethu.Phone.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ManufacturerController : ControllerBase
     {
         IManufacturerRepository _manufacturerRepository;
@@ -37,8 +38,7 @@ namespace Preethu.Phone.API.Controllers
             return Ok(new {manufacturer,msg2 });
         }
 
-        [HttpPost]
-        [Authorize]
+        [HttpPost]        
         public IActionResult Add(Manufacturer manufacturer)
         {
             var isCreated = _manufacturerRepository.CreateManufacturer(manufacturer);
@@ -52,7 +52,6 @@ namespace Preethu.Phone.API.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize]
         public IActionResult Edit(int id, Manufacturer manufacturer)
         {
             if (manufacturer == null)
@@ -71,7 +70,6 @@ namespace Preethu.Phone.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize]
         public IActionResult Delete(int id)
         {
             var existingmanufacturer = _manufacturerRepository.GetById(id);
