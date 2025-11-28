@@ -238,31 +238,6 @@ namespace Preethu.Phone.API.Migrations
                     b.ToTable("TblManufacturer");
                 });
 
-            modelBuilder.Entity("Preethu.Phone.API.Models.SearchQuery", b =>
-                {
-                    b.Property<int>("QueryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("QueryId"));
-
-                    b.Property<string>("OS")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Processor")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RAM")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Storage")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("QueryId");
-
-                    b.ToTable("TblSearchQuery");
-                });
-
             modelBuilder.Entity("Preethu.Phone.API.Models.SmartPhone", b =>
                 {
                     b.Property<int>("Id")

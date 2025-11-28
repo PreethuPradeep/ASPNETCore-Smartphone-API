@@ -123,9 +123,45 @@ namespace Preethu.Phone.API.Controllers
             return Ok($"Smart Phone {id} deleted successfully!");
         }
         [HttpGet("search")]
-        public IActionResult Search([FromQuery] SearchQuery filter)
+        public IActionResult Search([FromQuery] string? name, [FromQuery] string? manufacturer, [FromQuery] string? processor, [FromQuery] string? ram, [FromQuery] string? storage, [FromQuery] string? os)
         {
-            var result = smartPhoneRepository.Search(filter);
+
+            var query = smartPhoneRepository.GetAll().AsQueryable();
+            if (!string.IsNullOrEmpty(name))
+            {
+                query = query.Where(s => s.Name.Contains(name, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (!string.IsNullOrEmpty(manufacturer))
+            {
+                query = query.Where(s => s.Manufacturer.Name.Contains(manufacturer, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (!string.IsNullOrEmpty(processor))
+                query = query.Where(s => s.Specification.Processor.Contains(processor, StringComparison.OrdinalIgnoreCase));
+
+            if (!string.IsNullOrEmpty(ram))
+                query = query.Where(s => s.Specification.RAM.Contains(ram, StringComparison.OrdinalIgnoreCase));
+
+            if (!string.IsNullOrEmpty(storage))
+                query = query.Where(s => s.Specification.Storage.Contains(storage, StringComparison.OrdinalIgnoreCase));
+
+            if (!string.IsNullOrEmpty(os))
+                query = query.Where(s => s.Specification.OS.Contains(os, StringComparison.OrdinalIgnoreCase));
+
+            var result = query.Select(s => new
+            {
+                SmartPhoneId = s.Id,
+                SmartPhoneName = s.Name,
+                Description = s.Description,
+                Price = s.Price,
+                Manufacturer = s.Manufacturer != null ? s.Manufacturer.Name : "N/A",
+                Storage = s.Specification != null ? s.Specification.Storage : "N/A",
+                Operating_System = s.Specification != null ? s.Specification.OS : "N/A",
+                RAM = s.Specification != null ? s.Specification.RAM : "N/A",
+                Processor = s.Specification != null ? s.Specification.Processor : "N/A"
+            }).ToList();
+
             return Ok(result);
         }
 

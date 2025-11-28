@@ -12,8 +12,8 @@ using Preethu.Phone.API.Database;
 namespace Preethu.Phone.API.Migrations
 {
     [DbContext(typeof(SmartPhoneDbContext))]
-    [Migration("20251114071629_AddPkToSpecifications")]
-    partial class AddPkToSpecifications
+    [Migration("20251128055952_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -225,18 +225,18 @@ namespace Preethu.Phone.API.Migrations
 
             modelBuilder.Entity("Preethu.Phone.API.Models.Manufacturer", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("MId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MId"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.HasKey("Id");
+                    b.HasKey("MId");
 
                     b.ToTable("TblManufacturer");
                 });
@@ -279,11 +279,11 @@ namespace Preethu.Phone.API.Migrations
 
             modelBuilder.Entity("Preethu.Phone.API.Models.SmartPhoneSpec", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("SpecId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SpecId"));
 
                     b.Property<string>("OS")
                         .IsRequired()
@@ -302,7 +302,7 @@ namespace Preethu.Phone.API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("SpecId");
 
                     b.ToTable("TblSpecification");
                 });

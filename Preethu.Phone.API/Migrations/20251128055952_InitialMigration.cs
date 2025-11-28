@@ -54,20 +54,20 @@ namespace Preethu.Phone.API.Migrations
                 name: "TblManufacturer",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    MId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TblManufacturer", x => x.Id);
+                    table.PrimaryKey("PK_TblManufacturer", x => x.MId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "TblSpecification",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    SpecId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Processor = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     RAM = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -76,7 +76,7 @@ namespace Preethu.Phone.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TblSpecification", x => x.Id);
+                    table.PrimaryKey("PK_TblSpecification", x => x.SpecId);
                 });
 
             migrationBuilder.CreateTable(
@@ -204,13 +204,13 @@ namespace Preethu.Phone.API.Migrations
                         name: "FK_TblSmartPhone_TblManufacturer_MId",
                         column: x => x.MId,
                         principalTable: "TblManufacturer",
-                        principalColumn: "Id",
+                        principalColumn: "MId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_TblSmartPhone_TblSpecification_SpecId",
                         column: x => x.SpecId,
                         principalTable: "TblSpecification",
-                        principalColumn: "Id",
+                        principalColumn: "SpecId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
