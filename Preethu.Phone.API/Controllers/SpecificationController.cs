@@ -34,7 +34,7 @@ namespace Preethu.Phone.API.Controllers
                 return NotFound(msg1);
             }
             string msg2 = "Smart Phone listed Successfully";
-            return Ok(new { specification, msg2 });
+            return Ok(specification);
         }
 
         [HttpPost]
@@ -47,7 +47,7 @@ namespace Preethu.Phone.API.Controllers
             }
             var specificationAdded = specificationRepository.GetById(specification.SpecId);
             string msg = "Successfully created Smart Phone specification";
-            return Ok(new { specificationAdded, msg });
+            return Ok(msg );
         }
 
         [HttpPut("{id}")]
@@ -65,7 +65,7 @@ namespace Preethu.Phone.API.Controllers
             }
             var specification = specificationRepository.GetById(id);
             string msg = $"Details of Smart Phone specification Id : {id} updated";
-            return Ok(new { specification, msg });
+            return Ok(msg );
         }
 
         [HttpDelete("{id}")]

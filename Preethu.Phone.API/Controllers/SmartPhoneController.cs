@@ -64,7 +64,7 @@ namespace Preethu.Phone.API.Controllers
                 Processor = smartPhone.Specification?.Processor
             };
             string msg2 = "Smart Phone listed Successfully";
-            return Ok(new {result, msg2 });
+            return Ok(result);
         }
 
         [HttpPost]

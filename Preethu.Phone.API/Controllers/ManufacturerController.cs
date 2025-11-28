@@ -48,7 +48,7 @@ namespace Preethu.Phone.API.Controllers
             }
             var manufacturerAdded = _manufacturerRepository.GetById(manufacturer.MId);
             string msg = "Successfully created manufacturer";
-            return Ok(new {manufacturerAdded,msg });
+            return Ok(msg );
         }
 
         [HttpPut("{id}")]
@@ -66,7 +66,7 @@ namespace Preethu.Phone.API.Controllers
             }
             var manufacturerUpdated = _manufacturerRepository.GetById(id);
             string msg = $"Details of manufacturer Id : {id} updated";
-            return Ok(new { manufacturerUpdated, msg });
+            return Ok(msg );
         }
 
         [HttpDelete("{id}")]
