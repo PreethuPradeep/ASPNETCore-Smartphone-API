@@ -6,10 +6,10 @@ namespace Preethu.Phone.API.Repositories
     {
         List<SmartPhone> GetAll();
         SmartPhone GetById(int id);
-        string Create(SmartPhone specs);
+        void Create(SmartPhone specs);
         bool Update(int id, SmartPhone spec);
         bool Delete(int id);
-        List<SmartPhone>? GetBySpecs(SearchQuery searchQuery);
-        List<SmartPhone>? GetByManufacturer(string name);
+        public List<SmartPhone> Search(SearchQuery filter);
+        SmartPhone? GetByName(string name);
     }
 }

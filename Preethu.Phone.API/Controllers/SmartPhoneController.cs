@@ -3,19 +3,23 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Preethu.Phone.API.Models;
 using Preethu.Phone.API.Repositories;
+using Preethu.Phone.API.Services;
 
 namespace Preethu.Phone.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class SmartPhoneController : ControllerBase
     {
+        ISmartPhoneService smartPhoneService;
         ISmartPhoneRepository smartPhoneRepository;
 
-        public SmartPhoneController(ISmartPhoneRepository smartPhoneRepository)
+        public SmartPhoneController(ISmartPhoneRepository smartPhoneRepository,
+            ISmartPhoneService smartPhoneService)
         {
             this.smartPhoneRepository = smartPhoneRepository;
+            this.smartPhoneService = smartPhoneService;
         }
 
         [HttpGet]
@@ -66,13 +70,13 @@ namespace Preethu.Phone.API.Controllers
         [HttpPost]
         public IActionResult Add(SmartPhone smartPhone)
         {
-            string createStatus = smartPhoneRepository.Create(smartPhone);
+            string createStatus = smartPhoneService.Add(smartPhone);
             switch (createStatus)
             {
                 case "success":
-                    var smartPhoneAdded = smartPhoneRepository.GetById(smartPhone.Id);
+                    var smartPhoneAdded = smartPhoneRepository.GetByName(smartPhone.Name);
                     string msg = "Successfully created Smart Phone";
-                    return Ok(new { smartPhoneAdded, msg });
+                    return Ok(msg);
 
                 case "duplicate name":
                     return BadRequest(new { message = $"A smartphone with the name '{smartPhone.Name}' already exists." });
@@ -103,7 +107,7 @@ namespace Preethu.Phone.API.Controllers
             }
             var smartPhoneUpdated = smartPhoneRepository.GetById(id);
             string msg = $"Details of Smart Phone Id : {id} updated";
-            return Ok(new { smartPhoneUpdated, msg });
+            return Ok(msg );
         }
 
         [HttpDelete("{id}")]
@@ -118,25 +122,12 @@ namespace Preethu.Phone.API.Controllers
             smartPhoneRepository.Delete(id);
             return Ok($"Smart Phone {id} deleted successfully!");
         }
-        [HttpPost("Manufacturer")]
-        public IActionResult GetByManufacturer([FromBody] string name)
+        [HttpGet("search")]
+        public IActionResult Search([FromQuery] SearchQuery filter)
         {
-            var result = smartPhoneRepository.GetByManufacturer(name);
-            string msg = $"All smartphones made by the manufacturer {name}";
-            return Ok(new { msg, result });
+            var result = smartPhoneRepository.Search(filter);
+            return Ok(result);
         }
-        [HttpPost("Specification")]
-        public IActionResult GetBySpecs([FromBody] SearchQuery searchQuery)
-        {
-            var result = smartPhoneRepository.GetBySpecs(searchQuery);
-            if (result == null)
-            {
-                return NotFound("There is no match for smart phones with the specs");
-            }
-            else
-            {
-                return Ok(new { result });
-            }
-        }
+
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Preethu.Phone.API.Database;
 using Preethu.Phone.API.Repositories;
 using Preethu.Phone.API.Controllers;
+using Preethu.Phone.API.Services;
 
 namespace Preethu.Phone.API
 {
@@ -17,6 +18,7 @@ namespace Preethu.Phone.API
             builder.Services.AddScoped<ISmartPhoneRepository, SmartPhoneRepository>();
             builder.Services.AddScoped<ISpecificationRepository, SpecificationRepository>();
             builder.Services.AddScoped<IManufacturerRepository, ManufacturerRepository>();
+            builder.Services.AddScoped<ISmartPhoneService, SmartPhoneService>();
             builder.Services.AddControllers()
                 .AddJsonOptions(options =>
                 {

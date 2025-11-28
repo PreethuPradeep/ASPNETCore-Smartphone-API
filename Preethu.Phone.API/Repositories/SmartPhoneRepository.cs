@@ -11,29 +11,10 @@ namespace Preethu.Phone.API.Repositories
         {
             this.smartPhoneDbContext = smartPhoneDbContext;
         }
-        public string Create(SmartPhone smartPhone)
+        public void Create(SmartPhone smartPhone)
         {
-            var existingName = smartPhoneDbContext.TblSmartPhone
-                .FirstOrDefault(x => x.Name.ToLower() == smartPhone.Name.ToLower());
-            if (existingName != null)
-            {
-                return "duplicate name";
-            }
-            var manufacturerExists = smartPhoneDbContext.TblManufacturer
-                .Any(m => m.MId == smartPhone.MId);
-            if (!manufacturerExists)
-            {
-                return "invalid manufacturer";
-            }
-            var specExists = smartPhoneDbContext.TblSpecification
-                .Any(s => s.SpecId == smartPhone.SpecId);
-            if (!specExists)
-            {
-                return "invalid specification";
-            }
             smartPhoneDbContext.TblSmartPhone.Add(smartPhone);
             smartPhoneDbContext.SaveChanges();
-            return "success";
         }
 
         public bool Delete(int id)
@@ -59,40 +40,46 @@ namespace Preethu.Phone.API.Repositories
                     .Include(s => s.Specification).FirstOrDefault(x => x.Id == id);
         }
 
-        public List<SmartPhone>? GetByManufacturer(string name)
+
+        public SmartPhone? GetByName(string name)
         {
+            if (string.IsNullOrEmpty(name))
+                return null;
+
             return smartPhoneDbContext.TblSmartPhone
                 .Include(s => s.Manufacturer)
                 .Include(s => s.Specification)
-                .Where(p => p.Manufacturer != null && p.Manufacturer.Name.ToLower().Contains(name.ToLower()))
-                .ToList();
+                .FirstOrDefault(x => x.Name.ToLower() == name.ToLower());
         }
 
-        public List<SmartPhone>? GetBySpecs(SearchQuery searchQuery)
+        public List<SmartPhone> Search(SearchQuery filter)
         {
-            var SmartPhones = smartPhoneDbContext.TblSmartPhone
-                .Include(s => s.Manufacturer)
-                .Include(s => s.Specification)
+            var query = smartPhoneDbContext.TblSmartPhone
+                .Include(p => p.Manufacturer)
+                .Include(p => p.Specification)
                 .AsQueryable();
 
-            if (!string.IsNullOrEmpty(searchQuery.Processor))
-            {
-                SmartPhones = SmartPhones.Where(p => p.Specification != null && p.Specification.Processor != null && p.Specification.Processor.ToLower().Contains(searchQuery.Processor.ToLower()));
-            }
-            if (!string.IsNullOrEmpty(searchQuery.RAM))
-            {
-                SmartPhones = SmartPhones.Where(p => p.Specification != null && p.Specification.RAM != null && p.Specification.RAM.ToLower().Contains(searchQuery.RAM.ToLower()));
-            }
-            if (!string.IsNullOrEmpty(searchQuery.OS))
-            {
-                SmartPhones = SmartPhones.Where(p => p.Specification != null && p.Specification.OS != null && p.Specification.OS.ToLower().Contains(searchQuery.OS.ToLower()));
-            }
-            if (!string.IsNullOrEmpty(searchQuery.Storage))
-            {
-                SmartPhones = SmartPhones.Where(p => p.Specification != null && p.Specification.Storage != null && p.Specification.Storage.ToLower().Contains(searchQuery.Storage.ToLower()));
-            }
-            return SmartPhones.ToList();
+            if (!string.IsNullOrWhiteSpace(filter.Name))
+                query = query.Where(p => p.Name.Contains(filter.Name));
+
+            if (!string.IsNullOrWhiteSpace(filter.Manufacturer))
+                query = query.Where(p => p.Manufacturer.Name.Contains(filter.Manufacturer));
+
+            if (!string.IsNullOrWhiteSpace(filter.Processor))
+                query = query.Where(p => p.Specification.Processor.Contains(filter.Processor));
+
+            if (!string.IsNullOrWhiteSpace(filter.Storage))
+                query = query.Where(p => p.Specification.Storage == filter.Storage);
+
+            if (!string.IsNullOrWhiteSpace(filter.Ram))
+                query = query.Where(p => p.Specification.RAM == filter.Ram);
+
+            if (!string.IsNullOrWhiteSpace(filter.Os))
+                query = query.Where(p => p.Specification.OS == filter.Os);
+
+            return query.ToList();
         }
+
 
         public bool Update(int id, SmartPhone phone)
         {

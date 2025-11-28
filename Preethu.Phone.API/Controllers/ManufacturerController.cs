@@ -8,7 +8,7 @@ namespace Preethu.Phone.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class ManufacturerController : ControllerBase
     {
         IManufacturerRepository _manufacturerRepository;
@@ -35,7 +35,7 @@ namespace Preethu.Phone.API.Controllers
                 return NotFound(msg1);
             }
             string msg2 = "Manufacturer listed Successfully";
-            return Ok(new {manufacturer,msg2 });
+            return Ok(manufacturer);
         }
 
         [HttpPost]        
