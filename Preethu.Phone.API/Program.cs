@@ -13,7 +13,15 @@ namespace Preethu.Phone.API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAngularApp", policy =>
+                {
+                    policy.WithOrigins("http://localhost:4200") // Adjust if your Angular port differs
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
             // Add services to the container.
             builder.Services.AddScoped<ISmartPhoneRepository, SmartPhoneRepository>();
             builder.Services.AddScoped<ISpecificationRepository, SpecificationRepository>();
@@ -45,7 +53,8 @@ namespace Preethu.Phone.API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            app.UseCors("AllowAngularApp");
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapIdentityApi<IdentityUser>();
