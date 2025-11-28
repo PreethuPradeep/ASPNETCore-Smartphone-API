@@ -8,6 +8,7 @@ namespace Preethu.Phone.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class SpecificationController : ControllerBase
     {
         ISpecificationRepository specificationRepository;
@@ -18,6 +19,7 @@ namespace Preethu.Phone.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult GetAll()
         {
             var specifications = specificationRepository.GetSpecifications();
@@ -25,6 +27,7 @@ namespace Preethu.Phone.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public IActionResult GetById(int id)
         {
             var specification = specificationRepository.GetById(id);
@@ -38,6 +41,7 @@ namespace Preethu.Phone.API.Controllers
         }
 
         [HttpPost]
+
         public IActionResult Add(SmartPhoneSpec specification)
         {
             var isCreated = specificationRepository.Create(specification);
@@ -69,7 +73,6 @@ namespace Preethu.Phone.API.Controllers
         }
 
         [HttpDelete("{id}")]
-
         public IActionResult Delete(int id)
         {
             var existingSpecification = specificationRepository.GetById(id);

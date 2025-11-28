@@ -9,7 +9,7 @@ namespace Preethu.Phone.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class SmartPhoneController : ControllerBase
     {
         ISmartPhoneService smartPhoneService;
@@ -23,6 +23,7 @@ namespace Preethu.Phone.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult GetAll()
         {
             var smartPhones = smartPhoneRepository.GetAll();
@@ -43,6 +44,7 @@ namespace Preethu.Phone.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public IActionResult GetById(int id)
         {
             var smartPhone = smartPhoneRepository.GetById(id);
@@ -123,6 +125,7 @@ namespace Preethu.Phone.API.Controllers
             return Ok($"Smart Phone {id} deleted successfully!");
         }
         [HttpGet("search")]
+        [AllowAnonymous]
         public IActionResult Search([FromQuery] string? name, [FromQuery] string? manufacturer, [FromQuery] string? processor, [FromQuery] string? ram, [FromQuery] string? storage, [FromQuery] string? os)
         {
 

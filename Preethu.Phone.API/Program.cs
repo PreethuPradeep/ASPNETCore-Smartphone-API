@@ -43,6 +43,7 @@ namespace Preethu.Phone.API
                 options.UseSqlServer(ConnectionString);
             });
             builder.Services.AddIdentityApiEndpoints<IdentityUser>()
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<SmartPhoneDbContext>()
                 .AddDefaultTokenProviders();
             var app = builder.Build();
